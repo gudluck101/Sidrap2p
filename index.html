@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .bouncing-image {
+            width: 90px; /* Adjust size */
+            height: 90px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }  /* Start and end position */
+            50% { transform: translateY(-100px); }  /* Bounces up */
+        }
+    </style>
+</head>
+<body>
+
+    <img src="images/download_16.jpeg" class="bouncing-image" alt="Loading...">
+
+    <script>
+        // Redirect to the home page after 3 seconds
+        setTimeout(() => {
+            window.location.href = "sidra.html"; // Change this if needed
+        }, 3000);
+    </script>
+
+</body>
+</html>

